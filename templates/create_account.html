@@ -1,0 +1,17 @@
+{% extends "general.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="static/forms.css">
+<form class="account-wrapper" action="{{ url_for('create_account') }}" method="post">
+    <div style="display: flex; flex-direction: column;">
+    <label class="label" for="firstname">CREATE AN ACCOUNT</label>
+    <div class="person-input-container">
+        <input class="input-box" type="text" id="email" name="email" placeholder="email" autocomplete="off">
+        <input class="input-box" type="text" id="password" name="password" placeholder="password" autocomplete="off">
+        <input class="input-box" type="text" id="first-name" name="first-name" placeholder="First name" autocomplete="off">
+        <input class="input-box" type="text" id="last-name" name="last-name" placeholder="Last name" autocomplete="off">
+    </div>
+    <button type="submit" class="btn">ENTER</button>
+    </div>
+</form>
+{% endblock %}

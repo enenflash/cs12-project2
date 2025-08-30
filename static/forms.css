@@ -1,0 +1,9 @@
+.account-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: max-content;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 200px;
+}

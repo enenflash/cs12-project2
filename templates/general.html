@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Connect</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="\static\style.css">
+    <link rel="stylesheet" href="\static\light.css">
+</head>
+<body>
+    <div class="nav-bar">
+        <span style="padding-left: 5px;">
+            <a href="/search" style="text-decoration:none;">
+            <span class="material-symbols-outlined">search</span>
+            <p style="margin-top: 0px; margin-bottom: 5px; margin-right: 20px;">quote-rossmoyne</p>
+            </a>
+            <a href="/browse">browse quotes</a>
+            <a href="#">profiles</a>
+        </span>
+        <span>
+            <a href="/add/add-quote">add</a>
+            <a href="/create-account">sign up</a>
+            <a href="/login"><span style="font-size: 30px;" class="material-symbols-outlined">door_front</span></a>
+        </span>
+    </div>
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>
