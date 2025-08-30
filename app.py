@@ -16,11 +16,33 @@ def main_page():
 
 @app.route('/create-account', methods=['GET', 'POST'])
 def create_account():
+    if request.method == "POST":
+        email=request.form["email"]
+        first_name=request.form["first-name"]
+        last_name=request.form["last-name"]
+        password=request.form["password"]
+        if email=="" or first_name=="" or last_name=="" or password=="":
+            return render_template("create_account.html", message="All fields required.")
+        volunteers = get_volunteers()
+        if email in [volunteer["Email"] for volunteer in volunteers]:
+            return render_template("create_account.html", message="Email already has an account.")
+        if password != request.form["confirm-password"]:
+            return render_template("create_account.html", message="Passwords do not match.")
+        add_volunteer(first_name, last_name, email, password)
+        session["UID"] = get_volunteer_where(f'Email="{email}"')["ID"]
+        return redirect(url_for("home"))
     return render_template('create_account.html')
 
 @app.route('/account-details', methods=['GET', 'POST'])
 def account_details():
-    return render_template('account_details.html')
+    if "UID" not in session:
+        return redirect(url_for("login"))
+    if request.method == "POST":
+        alter_account_details(session["UID"], first_name=request.form["first-name"], last_name=request.form["last-name"], password=request.form["password"])
+        volunteer = get_volunteer_where(f"ID={session['UID']}")
+        return render_template("account_details.html", volunteer=volunteer, message="Success")
+    volunteer = get_volunteer_where(f"ID={session['UID']}")
+    return render_template('account_details.html', volunteer=volunteer, message="")
 
 @app.route('/home', methods=['GET', 'POST'])
 def home():
@@ -37,12 +59,13 @@ def organisations():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == "POST":
-        if not email_valid(request.form['email']):
+        email = request.form["email"]
+        password = request.form["password"]
+        if not email_valid(email):
             return render_template("login.html", message="Email not in database.")
-        if not password_valid(request.form['password']):
+        if not login_valid(email, password):
             return render_template("login.html", message="Incorrect password.")
-        session['email'] = request.form['email']
-        session['password'] = request.form['password']
+        session["UID"] = get_volunteer_where(f'Email="{email}"')["ID"]
         return redirect(url_for("home"))
     return render_template('login.html', message="")
 

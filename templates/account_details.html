@@ -1,4 +1,45 @@
 {% extends "general.html" %}
 
 {% block content %}
+<link rel="stylesheet" href="\static\forms.css">
+<form class="account-wrapper" action="{{ url_for('account_details') }}" method="post">
+    <div class="account-box">
+    <h1>ACCOUNT DETAILS</h1>
+    <p>Email: {{ volunteer["Email"] }}</p>
+    <span>
+        <p>Password</p>
+        <span class="input-wrapper">
+            <input type="password" id="password" name="password" value="{{ volunteer['Password'] }}" readonly>
+            <button type="button" id="edit-password" style="margin-left:5px;"><span class="material-symbols-outlined">edit</span></button>
+        </span>
+        <p>First Name</p>
+        <span class="input-wrapper">
+            <input type="text" id="first-name" name="first-name" value="{{ volunteer['FirstName'] }}" readonly>
+            <button type="button" id="edit-first-name" style="margin-left:5px;"><span class="material-symbols-outlined">edit</span></button>
+        </span>
+        <p>Last Name</p>
+        <span class="input-wrapper">
+            <input type="text" id="last-name" name="last-name" value="{{ volunteer['LastName'] }}" readonly>
+            <button type="button" id="edit-last-name" style="margin-left:5px;"><span class="material-symbols-outlined">edit</span></button>
+        </span>
+    </span>
+    <p style="color:green">{{ message }}</p>
+    <button type="submit" class="full-btn">Save</button>
+    </div>
+</form>
+</div>
+<script>
+    const edit_password_btn = document.getElementById("edit-password");
+    edit_password_btn.addEventListener('click', e => {
+        document.getElementById('password').readOnly = false;
+    });
+    const edit_first_name_btn = document.getElementById("edit-first-name");
+    edit_first_name_btn.addEventListener('click', e => {
+        document.getElementById('first-name').readOnly = false;
+    });
+    const edit_last_name_btn = document.getElementById("edit-last-name");
+    edit_last_name_btn.addEventListener('click', e => {
+        document.getElementById('last-name').readOnly = false;
+    });
+</script>
 {% endblock %}

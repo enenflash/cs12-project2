@@ -59,6 +59,12 @@ def run_command(command:str) -> None:
 
 # ---------------------------------- SELECT ---------------------------------- #
 
+def get_volunteer_where(where:str="TRUE") -> int:
+    command = f"""
+        SELECT * FROM Volunteer WHERE {where};
+    """
+    return get_row(command)
+
 def get_volunteers() -> list:
     command = f"""
         SELECT * FROM Volunteer;
@@ -116,8 +122,8 @@ def alter_account_details(id:int, first_name:str=None, last_name:str=None, passw
 
 def add_volunteer(first_name:str, last_name:str, email:str, password:str):
     command = f"""
-        INSERT INTO Volunteer (FirstName, LastName, Email, Password) VALUES
-        ("{first_name}", "{last_name}", "{email}", "{password}");
+        INSERT INTO Volunteer (FirstName, LastName, Email, Password, Admin) VALUES
+        ("{first_name}", "{last_name}", "{email}", "{password}", 0);
     """
     run_command(command)
 
@@ -133,12 +139,9 @@ def add_organisation(name:str):
 
 def email_valid(email:str) -> bool:
     volunteers:list = get_volunteers()
-    if email in [row["Email"] for row in volunteers]:
-        return True
-    return False
+    return email in [row["Email"] for row in volunteers]
 
-def password_valid(password:str) -> bool:
-    volunteers:list = get_volunteers()
-    if password in [row["Password"] for row in volunteers]:
-        return True
-    return False
+def login_valid(email:str, password:str) -> bool:
+    """Assumes email is valid"""
+    volunteer = get_volunteer_where(f'Email="{email}"')
+    return password == volunteer["Password"]
