@@ -1,17 +1,53 @@
 .scroll-div {
     display: flex;
-    flex-direction: column;
-    margin: 0px 0px 0px 20px;
-    padding: 10px 20px 20px 0px;
+    flex-direction: row;
+    padding: 0px 0px 0px 10px;
     height: 100%; 
-    overflow-y: scroll;
     box-sizing: border-box;
 }
 
-.event-wrapper {
+.side-bar {
+    display: flex;
+    flex-direction: column;
+    width: 25%;
+    box-sizing: border-box;
+    margin: 10px 10px 10px 0px;
+    padding: 5px 15px 5px 15px;
+    overflow-y: auto;
+    height: max-content;
+
+    background: #fff;
+    border-top-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    box-shadow: 5px 5px 10px #ccc;
+}
+
+.block-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 10px;
+    width: 100%;
+    overflow-y: auto;
+}
+
+.info-block {
     background: white;
     margin: 10px 0px 10px 0px;
     padding: 0px 20px 0px 20px;
     border: solid 1px;
     border-radius: 10px;
+    box-shadow: 5px 5px 10px #ccc;
+}
+
+#search {
+    outline: none;
+}
+
+input {
+    margin-bottom: 10px;
+}
+
+button {
+    margin-bottom: 10px;
+    height: 30px;
 }

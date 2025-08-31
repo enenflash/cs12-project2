@@ -3,13 +3,21 @@
 {% block content %}
 <link rel="stylesheet" href="\static\lists.css">
 <div class="scroll-div">
-    {% for event in events %}
-    <div class="event-wrapper">
-        <h1>{{ event["Name"] }}</h1>
-        <p>From {{ event["StartDate"] }} To {{ event["EndDate"] }}</p>
-        <p>At {{ event["Location"] }}</p>
-        <p>Run by {{ event["Organisation"] }}</p>
+    <form class="side-bar" action="{{ url_for('events') }}" method="post">
+        <h3>REFINE SEARCH</h3>
+        <label for="search">Search</label>
+        <input class="input-box" type="text" id="search" name="search" placeholder="Search events . . ." autocomplete="off">
+        <button type="submit">Search</button>
+    </form>
+    <div class="block-wrapper">
+        {% for event in events %}
+        <div class="info-block">
+            <h1>{{ event["Name"] }}</h1>
+            <p>From {{ event["StartDate"] }} To {{ event["EndDate"] }}</p>
+            <p>At {{ event["Location"] }}</p>
+            <p>Run by {{ event["Organisation"] }}</p>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 </div>
 {% endblock %}

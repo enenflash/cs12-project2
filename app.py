@@ -12,7 +12,7 @@ app.secret_key = secrets.token_hex(32)
 
 @app.route('/', methods=['GET', 'POST'])
 def main_page():
-	return render_template('home.html')
+	return render_template('main_page.html')
 
 @app.route('/create-account', methods=['GET', 'POST'])
 def create_account():
@@ -30,7 +30,7 @@ def create_account():
             return render_template("create_account.html", message="Passwords do not match.")
         add_volunteer(first_name, last_name, email, password)
         session["UID"] = get_volunteer_where(f'Email="{email}"')["ID"]
-        return redirect(url_for("home"))
+        return redirect(url_for("dashboard"))
     return render_template('create_account.html')
 
 @app.route('/account-details', methods=['GET', 'POST'])
@@ -44,9 +44,16 @@ def account_details():
     volunteer = get_volunteer_where(f"ID={session['UID']}")
     return render_template('account_details.html', volunteer=volunteer, message="")
 
-@app.route('/home', methods=['GET', 'POST'])
-def home():
-    return render_template('home.html')
+@app.route('/dashboard', methods=['GET', 'POST'])
+def dashboard():
+    if "UID" not in session:
+        return redirect(url_for("login"))
+    return render_template('dashboard.html')
+
+@app.route('/volunteering', methods=['GET', 'POST'])
+def volunteering():
+    available_opportunities = get_available_opportunities()
+    return render_template("volunteering.html", opportunities=available_opportunities)
 
 @app.route('/events', methods=['GET', 'POST'])
 def events():
@@ -68,7 +75,7 @@ def login():
         if not login_valid(email, password):
             return render_template("login.html", message="Incorrect password.")
         session["UID"] = get_volunteer_where(f'Email="{email}"')["ID"]
-        return redirect(url_for("home"))
+        return redirect(url_for("dashboard"))
     return render_template('login.html', message="")
 
 if __name__ == "__main__":

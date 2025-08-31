@@ -3,8 +3,16 @@
 {% block content %}
 <link rel="stylesheet" href="\static\lists.css">
 <div class="scroll-div">
-    {% for organisation in organisations %}
-    <h1>{{ organisation["Name"] }}</h1>
-    {% endfor %}
+    <form class="side-bar" action="{{ url_for('events') }}" method="post">
+        <h3>REFINE SEARCH</h3>
+        <label for="search">Search</label>
+        <input class="input-box" type="text" id="search" name="search" placeholder="Search events . . ." autocomplete="off">
+        <button type="submit">Search</button>
+    </form>
+    <div style="background:white; width:100%; padding:10px; margin-bottom:10px; margin-right:10px;">
+        {% for organisation in organisations %}
+        <h1>{{ organisation["Name"] }}</h1>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}

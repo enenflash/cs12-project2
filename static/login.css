@@ -11,6 +11,7 @@ p {
 }
 
 body {
+    background: white;
     height: 100%;
     margin: 0px;
     padding-bottom: 30px;

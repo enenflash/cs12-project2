@@ -12,11 +12,15 @@
     color: black;
 }
 
-.btn {
-    border: solid 1.5px var(--blue);
-    color: var(--blue);
+button {
+    /* border: solid 1.5px var(--blue); */
+    border: solid 1.5px black;
+    /* color: var(--blue); */
+    color: black;
 }
 
-.btn:hover {
-    background: var(--blue);
+button:hover {
+    /* background: var(--blue); */
+    background: black;
+    color: white;
 }

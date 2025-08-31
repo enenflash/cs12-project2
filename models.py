@@ -77,7 +77,29 @@ def get_organistaions(where:str="TRUE") -> list:
     """
     return get_table(command)
 
-def get_event_types_for_event(event_id:int) -> list:
+def get_skills_for_opportunity(opportunity_id:int) -> list[str]:
+    command = f"""
+        SELECT Skill.Name FROM OpportunitySkill 
+        INNER JOIN Skill ON OpportunitySkill.SkillID=Skill.ID
+        WHERE OpportunitySkill.OpportunityID={opportunity_id};
+    """
+    skills = get_table(command)
+    return [skill["Name"] for skill in skills]
+
+def get_available_opportunities(where:str="TRUE") -> list:
+    command = f"""
+        SELECT VO.ID, Event.ID AS EventID FROM VolunteerOpportunity AS VO
+        INNER JOIN Event ON VO.EventID=Event.ID
+        WHERE VO.VolunteerID NOT NULL AND {where};
+    """
+    opportunities:list[dict] = get_table(command)
+    for i in range(len(opportunities)):
+        opportunities[i] = dict(opportunities[i])
+        opportunities[i]["Skill"] = get_skills_for_opportunity(opportunities[i]["EventID"])
+        opportunities[i] |= get_events(f"Event.ID={opportunities[i]['EventID']}")[0]
+    return opportunities
+
+def get_event_types_for_event(event_id:int) -> list[str]:
     command = f"""
         SELECT EventType.Name FROM EventTypeJunction 
         INNER JOIN EventType ON EventTypeJunction.TypeID=EventType.ID
@@ -97,7 +119,7 @@ def get_events(where:str="TRUE") -> list:
     for i in range(len(events)):
         events[i] = dict(events[i])
         events[i]["Type"] = get_event_types_for_event(events[i]["ID"])
-        events[i]["StartDate"] = format_time(events[i]["StartDate"].split(" ")[1]) + format_date(events[i]["StartDate"].split(" ")[0])
+        events[i]["StartDate"] = format_time(events[i]["StartDate"].split(" ")[1]) + " " + format_date(events[i]["StartDate"].split(" ")[0])
         events[i]["EndDate"] = format_time(events[i]["EndDate"].split(" ")[1]) + " " + format_date(events[i]["EndDate"].split(" ")[0])
     return events
 
