@@ -1,0 +1,53 @@
+{% extends "general.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="\static\forms.css">
+<form class="form-wrapper" action="{{ url_for('event') }}" method="post">
+<div class="form-box">
+    <input type="number" id="EventID" name="EventID" style="display:none;" value="{{ event['ID'] }}" readonly>
+    <h1>{{ event["Name"] }}</h1>
+    <p>Organisation: {{ event["Organisation"] }}</p>
+    <p>Location</p>
+    <span class="input-wrapper">
+        <input type="text" id="location" name="location" value="{{ event['Location'] }}" readonly>
+        {% if perms %}<button type="button" id="edit-location" style="margin-left:5px;"><span class="material-symbols-outlined">edit</span></button>{% endif %}
+    </span>
+    <p>StartDate</p>
+    <span class="input-wrapper">
+        <input type="date" id="start-date" name="start-date" value="{{ event['StartDateOnly'] }}" style="margin-right:2px;" readonly>
+        <input type="time" id="start-time" name="start-time" value="{{ event['StartTime'] }}" style="margin-left:2px;" readonly>
+        {% if perms %}<button type="button" id="edit-start-date" style="margin-left:5px;"><span class="material-symbols-outlined">edit</span></button>{% endif %}
+    </span>
+    <p>EndDate</p>
+    <span class="input-wrapper">
+        <input type="date" id="end-date" name="end-date" value="{{ event['EndDateOnly'] }}" style="margin-right:2px;" readonly>
+        <input type="time" id="end-time" name="end-time" value="{{ event['EndTime'] }}" style="margin-left:2px;" readonly>
+        {% if perms %}<button type="button" id="edit-end-date" style="margin-left:5px;"><span class="material-symbols-outlined">edit</span></button>{% endif %}
+    </span>
+    {% if perms %}
+    <span style="display:flex;flex-direction:row;justify-content:center;align-items:center;margin-top:10px;">
+        <input type="checkbox" id="delete" name="delete" style="width:20px; height:20px;">
+        <label for="delete" style="margin-left:5px;">Delete Event</label>
+    </span>
+    <p style="color:green">{{ message }}</p>
+    <button type="submit" class="full-btn">Save</button>
+    {% endif %}
+    </div>
+</form>
+<script>
+    const edit_location_btn = document.getElementById("edit-location");
+    edit_location_btn.addEventListener('click', e => {
+        document.getElementById('location').readOnly = false;
+    });
+    const edit_start_date_btn = document.getElementById("edit-start-date");
+    edit_start_date_btn.addEventListener('click', e => {
+        document.getElementById('start-date').readOnly = false;
+        document.getElementById('start-time').readOnly = false;
+    });
+    const edit_end_date_btn = document.getElementById("edit-end-date");
+    edit_end_date_btn.addEventListener('click', e => {
+        document.getElementById('end-date').readOnly = false;
+        document.getElementById('end-time').readOnly = false;
+    });
+</script>
+{% endblock %}

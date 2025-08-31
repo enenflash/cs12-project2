@@ -37,6 +37,14 @@
     border: solid 1px;
     border-radius: 10px;
     box-shadow: 5px 5px 10px #ccc;
+    text-decoration: none;
+    color: black;
+}
+
+.info-block:hover {
+    background: black;
+    color: white;
+    cursor: pointer;
 }
 
 #search {

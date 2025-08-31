@@ -30,9 +30,10 @@ body {
     padding: 10px 5px 10px 5px;
     justify-content: space-between;
     z-index: 1;
-    height: 55px;
+    height: 60px;
     background: #fff;
     box-shadow: 0px 5px 5px #ddd;
+    border-top: solid 5px black;
 }
 
 .nav-bar a {
@@ -56,7 +57,7 @@ body {
 
 .content {
     position: absolute;
-    top: 55px;
+    top: 60px;
     right: 0;
     bottom: 0;
     left: 0;
@@ -72,5 +73,4 @@ button:hover {
     cursor: pointer;
     background: black;
     color: white;
-    transition: all 0.3s ease;
 }

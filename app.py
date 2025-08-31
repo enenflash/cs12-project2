@@ -29,7 +29,7 @@ def create_account():
         if password != request.form["confirm-password"]:
             return render_template("create_account.html", message="Passwords do not match.")
         add_volunteer(first_name, last_name, email, password)
-        session["UID"] = get_volunteer_where(f'Email="{email}"')["ID"]
+        session["UID"] = get_volunteers(f'Email="{email}"')[0]["ID"]
         return redirect(url_for("dashboard"))
     return render_template('create_account.html')
 
@@ -39,16 +39,17 @@ def account_details():
         return redirect(url_for("login"))
     if request.method == "POST":
         alter_account_details(session["UID"], first_name=request.form["first-name"], last_name=request.form["last-name"], password=request.form["password"])
-        volunteer = get_volunteer_where(f"ID={session['UID']}")
+        volunteer = get_volunteers(f"ID={session['UID']}")[0]
         return render_template("account_details.html", volunteer=volunteer, message="Success")
-    volunteer = get_volunteer_where(f"ID={session['UID']}")
+    volunteer = get_volunteers(f"ID={session['UID']}")[0]
     return render_template('account_details.html', volunteer=volunteer, message="")
 
 @app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
     if "UID" not in session:
         return redirect(url_for("login"))
-    return render_template('dashboard.html')
+    opportunities = get_taken_opportunities(f"VO.VolunteerID={session['UID']}")
+    return render_template('dashboard.html', opportunities=opportunities)
 
 @app.route('/volunteering', methods=['GET', 'POST'])
 def volunteering():
@@ -59,6 +60,27 @@ def volunteering():
 def events():
     events = get_events()
     return render_template('events.html', events=events)
+
+@app.route('/event', methods=['GET', 'POST'])
+def event():
+    if request.method == "POST":
+        return render_template("event.html", event=event, perms=perms, message="Coming soon.")
+        event_id = request.form["EventID"]
+        event = get_events(f"Event.ID={event_id}")[0]
+        perms = session["Admin"] if "Admin" in session else False
+        if not perms:
+            return render_template("event.html", event=event, perms=perms, message="You do not have permissions to edit events.")
+        if request.form.get("delete"):
+            delete_event(event_id)
+            return redirect(url_for("events"))
+        return render_template("event.html", event=event, perms=perms, message="Editing events coming soon.")
+    
+    event_id = request.args.get('id', default="-1")
+    if event_id == "-1":
+        return redirect(url_for("events"))
+    event = get_events(f"Event.ID={event_id}")[0]
+    perms = session["Admin"] if "Admin" in session else False
+    return render_template("event.html", event=event, perms=perms, message="")
 
 @app.route('/organisations', methods=['GET', 'POST'])
 def organisations():
@@ -74,7 +96,9 @@ def login():
             return render_template("login.html", message="Email not in database.")
         if not login_valid(email, password):
             return render_template("login.html", message="Incorrect password.")
-        session["UID"] = get_volunteer_where(f'Email="{email}"')["ID"]
+        volunteer = get_volunteers(f'Email="{email}"')[0]
+        session["UID"] = volunteer["ID"]
+        session["Admin"] = volunteer["Admin"]
         return redirect(url_for("dashboard"))
     return render_template('login.html', message="")
 

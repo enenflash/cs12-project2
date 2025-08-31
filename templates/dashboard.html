@@ -1,4 +1,16 @@
 {% extends "general.html" %}
 
 {% block content %}
+<link rel="stylesheet" href="\static\lists.css">
+<div style="padding:0px 20px 20px 20px; overflow-y:scroll;">
+    <h1>You are volunteering for: </h1>
+    {% for opportunity in opportunities %}
+    <div class="info-block">
+        <h1>{{ opportunity["Name"] }}</h1>
+        <p>From {{ opportunity["StartDate"] }} To {{ opportunity["EndDate"] }}</p>
+        <p>At {{ opportunity["Location"] }}</p>
+        <p>Run by {{ opportunity["Organisation"] }}</p>
+    </div>
+    {% endfor %}
+</div>
 {% endblock %}

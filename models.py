@@ -59,15 +59,9 @@ def run_command(command:str) -> None:
 
 # ---------------------------------- SELECT ---------------------------------- #
 
-def get_volunteer_where(where:str="TRUE") -> int:
+def get_volunteers(where:str="TRUE") -> list:
     command = f"""
         SELECT * FROM Volunteer WHERE {where};
-    """
-    return get_row(command)
-
-def get_volunteers() -> list:
-    command = f"""
-        SELECT * FROM Volunteer;
     """
     return get_table(command)
 
@@ -90,12 +84,25 @@ def get_available_opportunities(where:str="TRUE") -> list:
     command = f"""
         SELECT VO.ID, Event.ID AS EventID FROM VolunteerOpportunity AS VO
         INNER JOIN Event ON VO.EventID=Event.ID
-        WHERE VO.VolunteerID NOT NULL AND {where};
+        WHERE VO.VolunteerID IS NULL AND {where};
     """
     opportunities:list[dict] = get_table(command)
     for i in range(len(opportunities)):
         opportunities[i] = dict(opportunities[i])
         opportunities[i]["Skill"] = get_skills_for_opportunity(opportunities[i]["EventID"])
+        opportunities[i] |= get_events(f"Event.ID={opportunities[i]['EventID']}")[0]
+    return opportunities
+
+def get_taken_opportunities(where:str="TRUE") -> list:
+    command = f"""
+        SELECT VO.ID, Event.ID AS EventID, VO.VolunteerID FROM VolunteerOpportunity AS VO
+        INNER JOIN Event ON VO.EventID=Event.ID
+        WHERE VO.VolunteerID NOT NULL AND {where};
+    """
+    opportunities:list[dict] = get_table(command)
+    for i in range(len(opportunities)):
+        opportunities[i] = dict(opportunities[i])
+        opportunities[i] |= get_volunteers(f"ID={opportunities[i]['VolunteerID']}")[0]
         opportunities[i] |= get_events(f"Event.ID={opportunities[i]['EventID']}")[0]
     return opportunities
 
@@ -110,7 +117,10 @@ def get_event_types_for_event(event_id:int) -> list[str]:
 
 def get_events(where:str="TRUE") -> list:
     command = f"""
-        SELECT Event.ID, Event.Name, Event.StartDate, Event.EndDate, Location.Name AS Location, Organisation.Name AS Organisation FROM Event 
+        SELECT Event.ID, Event.Name, Event.StartDate, Event.EndDate, 
+        DATE(StartDate) AS StartDateOnly, DATE(EndDate) AS EndDateOnly,
+        TIME(StartDate) AS StartTime, TIME(EndDate) AS EndTime,
+        Location.Name AS Location, Organisation.Name AS Organisation FROM Event 
         INNER JOIN Organisation ON Event.OrganisationID=Organisation.ID
         INNER JOIN Location ON Event.LocationID=Location.ID
         WHERE {where};
@@ -142,6 +152,10 @@ def alter_account_details(id:int, first_name:str=None, last_name:str=None, passw
     """
     run_command(command)
 
+# coming soon
+def alter_event_details():
+    pass
+
 # ------------------------------------ ADD ----------------------------------- #
 
 def add_volunteer(first_name:str, last_name:str, email:str, password:str):
@@ -157,7 +171,14 @@ def add_organisation(name:str):
     """
     run_command(command)
 
-# TODO Add event function
+# ---------------------------------- DELETE ---------------------------------- #
+
+def delete_event(id:int) -> None:
+    command = f"""
+        DELETE FROM Event WHERE ID={id};
+    """
+    print("A")
+    run_command(command)
 
 # -------------------------------- CHECK VALID ------------------------------- #
 
@@ -167,5 +188,5 @@ def email_valid(email:str) -> bool:
 
 def login_valid(email:str, password:str) -> bool:
     """Assumes email is valid"""
-    volunteer = get_volunteer_where(f'Email="{email}"')
+    volunteer = get_volunteers(f'Email="{email}"')[0]
     return password == volunteer["Password"]

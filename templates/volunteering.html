@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="\static\lists.css">
 <div class="scroll-div">
     <form class="side-bar" action="{{ url_for('volunteering') }}" method="post">
-        <h3>REFINE SEARCH</h3>
+        <h3>VOLUNTEERING    </h3>
         <label for="search">Search</label>
         <input class="input-box" type="text" id="search" name="search" placeholder="Search opportunities . . ." autocomplete="off">
         <button type="submit">Search</button>
@@ -12,7 +12,7 @@
     <div class="block-wrapper">
         {% for opportunity in opportunities %}
         <div class="info-block">
-            <h1>{{ opportunity["EventName"] }}</h1>
+            <h1>{{ opportunity["Name"] }}</h1>
             <p>From {{ opportunity["StartDate"] }} To {{ opportunity["EndDate"] }}</p>
             <p>At {{ opportunity["Location"] }}</p>
             <p>Run by {{ opportunity["Organisation"] }}</p>
