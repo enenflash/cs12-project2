@@ -18,6 +18,7 @@ body {
     width: 100%;
     height: 100%;
     overflow-y: hidden;
+    background: #eee;
 }
 
 .nav-bar {
@@ -30,6 +31,8 @@ body {
     justify-content: space-between;
     z-index: 1;
     height: 55px;
+    background: #fff;
+    box-shadow: 0px 5px 5px #ddd;
 }
 
 .nav-bar a {
@@ -52,6 +55,29 @@ body {
 }
 
 .content {
-    width: 100%;
-    height: 100%;
+    position: absolute;
+    top: 55px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.side-bar {
+    background: #fff;
+    border-top-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    box-shadow: 5px 5px 10px #ccc;
+}
+
+.btn {
+    border: solid 1.5px;
+    border-radius: 10px;
+    background: #fff;
+}
+
+.btn:hover {
+    cursor: pointer;
+    background: black;
+    color: white;
+    transition: all 0.5s ease;
 }

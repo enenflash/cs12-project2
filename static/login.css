@@ -35,10 +35,13 @@ input {
     padding: 4px;
     margin-top: 5px;
     margin-bottom: 15px;
+    outline: none;
 }
 
 input:focus {
     outline: none;
+    border: solid 1px #aaa;
+    border-radius: 10px;
 }
 
 button:hover {

@@ -1,5 +1,15 @@
 {% extends "general.html" %}
 
 {% block content %}
-<p>Hello User.</p>
+<link rel="stylesheet" href="\static\lists.css">
+<div class="scroll-div">
+    {% for event in events %}
+    <div class="event-wrapper">
+        <h1>{{ event["Name"] }}</h1>
+        <p>From {{ event["StartDate"] }} To {{ event["EndDate"] }}</p>
+        <p>At {{ event["Location"] }}</p>
+        <p>Run by {{ event["Organisation"] }}</p>
+    </div>
+    {% endfor %}
+</div>
 {% endblock %}

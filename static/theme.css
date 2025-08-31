@@ -1,0 +1,22 @@
+:root {
+    --blue: #1e90ff;
+}
+
+.nav-bar {
+    /* color: var(--blue); */
+    color: black;
+}
+
+.nav-bar a {
+    /* color: var(--blue); */
+    color: black;
+}
+
+.btn {
+    border: solid 1.5px var(--blue);
+    color: var(--blue);
+}
+
+.btn:hover {
+    background: var(--blue);
+}

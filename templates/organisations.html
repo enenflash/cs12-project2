@@ -1,4 +1,10 @@
 {% extends "general.html" %}
 
 {% block content %}
+<link rel="stylesheet" href="\static\lists.css">
+<div class="scroll-div">
+    {% for organisation in organisations %}
+    <h1>{{ organisation["Name"] }}</h1>
+    {% endfor %}
+</div>
 {% endblock %}

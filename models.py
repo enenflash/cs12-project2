@@ -88,7 +88,7 @@ def get_event_types_for_event(event_id:int) -> list:
 
 def get_events(where:str="TRUE") -> list:
     command = f"""
-        SELECT * FROM Event 
+        SELECT Event.ID, Event.Name, Event.StartDate, Event.EndDate, Location.Name AS Location, Organisation.Name AS Organisation FROM Event 
         INNER JOIN Organisation ON Event.OrganisationID=Organisation.ID
         INNER JOIN Location ON Event.LocationID=Location.ID
         WHERE {where};
@@ -96,7 +96,9 @@ def get_events(where:str="TRUE") -> list:
     events:list[dict] = get_table(command)
     for i in range(len(events)):
         events[i] = dict(events[i])
-        events[i]["type"] = get_event_types_for_event(events[i]["ID"])
+        events[i]["Type"] = get_event_types_for_event(events[i]["ID"])
+        events[i]["StartDate"] = format_time(events[i]["StartDate"].split(" ")[1]) + format_date(events[i]["StartDate"].split(" ")[0])
+        events[i]["EndDate"] = format_time(events[i]["EndDate"].split(" ")[1]) + " " + format_date(events[i]["EndDate"].split(" ")[0])
     return events
 
 # ---------------------------------- MODIFY ---------------------------------- #

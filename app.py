@@ -50,11 +50,13 @@ def home():
 
 @app.route('/events', methods=['GET', 'POST'])
 def events():
-    return render_template('events.html')
+    events = get_events()
+    return render_template('events.html', events=events)
 
 @app.route('/organisations', methods=['GET', 'POST'])
 def organisations():
-    return render_template('organisations.html')
+    organisations = get_organistaions()
+    return render_template('organisations.html', organisations=organisations)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
