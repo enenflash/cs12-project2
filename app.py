@@ -33,6 +33,25 @@ def create_account():
         return redirect(url_for("dashboard"))
     return render_template('create_account.html')
 
+# ---------------------------------------------------------------------------- #
+#                                   USER VIEW                                  #
+# ---------------------------------------------------------------------------- #
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == "POST":
+        email = request.form["email"]
+        password = request.form["password"]
+        if not email_valid(email):
+            return render_template("login.html", message="Email not in database.")
+        if not login_valid(email, password):
+            return render_template("login.html", message="Incorrect password.")
+        volunteer = get_volunteers(f'Email="{email}"')[0]
+        session["UID"] = volunteer["ID"]
+        session["Admin"] = volunteer["Admin"]
+        return redirect(url_for("dashboard"))
+    return render_template('login.html', message="")
+
 @app.route('/account-details', methods=['GET', 'POST'])
 def account_details():
     if "UID" not in session:
@@ -87,20 +106,29 @@ def organisations():
     organisations = get_organistaions()
     return render_template('organisations.html', organisations=organisations)
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
+# ---------------------------------------------------------------------------- #
+#                               ORGANISATION VIEW                              #
+# ---------------------------------------------------------------------------- #
+
+@app.route('/org-login', methods=['GET', 'POST'])
+def org_login():
     if request.method == "POST":
         email = request.form["email"]
         password = request.form["password"]
-        if not email_valid(email):
-            return render_template("login.html", message="Email not in database.")
-        if not login_valid(email, password):
-            return render_template("login.html", message="Incorrect password.")
-        volunteer = get_volunteers(f'Email="{email}"')[0]
-        session["UID"] = volunteer["ID"]
-        session["Admin"] = volunteer["Admin"]
-        return redirect(url_for("dashboard"))
-    return render_template('login.html', message="")
+        if not org_email_valid(email):
+            return render_template("organisation/org_login.html", message="Organisation email not in database.")
+        if not org_login_valid(email, password):
+            return render_template("organisation/org_login.html", message="Incorrect password.")
+        organisation = get_organistaions(f'Email="{email}"')[0]
+        session["OID"] = organisation["ID"]
+        return redirect(url_for("org_dashboard"))
+    return render_template('organisation/org_login.html', message="")
+
+@app.route('/org-dashboard', methods=['GET', 'POST'])
+def org_dashboard():
+    if "OID" not in session:
+        return redirect(url_for("org_login"))
+    return render_template('organisation/org_dashboard.html')
 
 if __name__ == "__main__":
     use_ip = input("Use private IP (Y/N): ")

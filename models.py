@@ -190,3 +190,11 @@ def login_valid(email:str, password:str) -> bool:
     """Assumes email is valid"""
     volunteer = get_volunteers(f'Email="{email}"')[0]
     return password == volunteer["Password"]
+
+def org_email_valid(email:str) -> bool:
+    organisations:list = get_organistaions()
+    return email in [row["Email"] for row in organisations]
+
+def org_login_valid(email:str, password:str) -> bool:
+    organisation = get_organistaions(f'Email="{email}"')[0]
+    return password == organisation["Password"]

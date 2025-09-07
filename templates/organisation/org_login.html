@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Connect Login</title>
+    <link rel="stylesheet" href="\static\style.css">
+    <link rel="stylesheet" href="\static\login.css">
+</head>
+<body>
+    <form class="login-wrapper" action="{{ url_for('org_login') }}" method="post">
+        <div class="login-wrapper">
+            <h1>Community Connect</h1>
+            <h3>Organisation Login</h3>
+            <label for="email">Email</label>
+            <input type="text" id="email" name="email" placeholder="E.g. org.name@gmail.com">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password">
+        </div>
+        <p style="color:red;">{{ message }}</p>
+        <button type="submit" class="full-btn">Login</button>
+        <a class="full-btn" href="/events">Continue as guest</a>
+    </form>
+</body>
+</html>

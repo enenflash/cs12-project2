@@ -1,7 +1,16 @@
-ALTER TABLE Volunteer DROP COLUMN Email;
-ALTER TABLE Volunteer RENAME COLUMN Username TO Email;
-UPDATE Volunteer SET Email=Email || "@gmail.com";
-UPDATE Volunteer SET Email="big_buff_manly_roach@gmail.com" WHERE ID=6;
-ALTER TABLE Volunteer ADD COLUMN Admin BOOLEAN;
-UPDATE Volunteer SET Admin=TRUE WHERE ID=1;
-UPDATE Volunteer SET Admin=FALSE WHERE ID!=1;
+-- ALTER TABLE Volunteer DROP COLUMN Email;
+-- ALTER TABLE Volunteer RENAME COLUMN Username TO Email;
+-- UPDATE Volunteer SET Email=Email || "@gmail.com";
+-- UPDATE Volunteer SET Email="big_buff_manly_roach@gmail.com" WHERE ID=6;
+-- ALTER TABLE Volunteer ADD COLUMN Admin BOOLEAN;
+-- UPDATE Volunteer SET Admin=TRUE WHERE ID=1;
+-- UPDATE Volunteer SET Admin=FALSE WHERE ID!=1;
+
+-- ALTER TABLE Organisation ADD COLUMN Email TEXT;
+-- ALTER TABLE Organisation ADD COLUMN Password TEXT;
+-- UPDATE Organisation SET Email="robocupjunior@gmail.com" WHERE ID=1;
+-- UPDATE Organisation SET Email="wafflemania@gmail.com" WHERE ID=2;
+-- UPDATE Organisation SET Email="soup&bowling@gmail.com" WHERE ID=3;
+-- UPDATE Organisation SET Email="alajakam@gmail.com" WHERE ID=4;
+-- UPDATE Organisation SET Email="rossmoyneshs@gmail.com" WHERE ID=5;
+-- UPDATE Organisation SET Password="password1234" WHERE ID>=1;
