@@ -1,0 +1,23 @@
+{% extends "organisation/org_view.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="\static\lists.css">
+<div class="scroll-div">
+    <form class="side-bar" action="{{ url_for('org_events') }}" method="post">
+        <h3>EVENTS</h3>
+        <label for="search">Search</label>
+        <input class="input-box" type="text" id="search" name="search" placeholder="Search events . . ." autocomplete="off">
+        <button type="submit">Search</button>
+    </form>
+    <div class="block-wrapper">
+        {% for event in events %}
+        <a class="info-block" href="\event?id={{ event['ID'] }}">
+            <h1>{{ event["Name"] }}</h1>
+            <p>From {{ event["StartDate"] }} To {{ event["EndDate"] }}</p>
+            <p>At {{ event["Location"] }}</p>
+            <p>Run by {{ event["Organisation"] }}</p>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

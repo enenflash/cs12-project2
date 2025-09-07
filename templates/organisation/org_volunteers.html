@@ -1,0 +1,35 @@
+{% extends "organisation/org_view.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="\static\lists.css">
+<div class="scroll-div">
+    <form class="side-bar" action="{{ url_for('org_volunteers') }}" method="post">
+        <h3>VOLUNTEERS</h3>
+        <label for="search">Search</label>
+        <input class="input-box" type="text" id="search" name="search" placeholder="Search volunteers . . ." autocomplete="off">
+        <label for="search">Skills</label>
+        <select class="input-box" id="skill-id" name="skill-id" style="margin-bottom:5px;">
+            <option value="-"></option>
+            {% for skill in skills %}
+                <option value="{{ skill['id'] }}">{{ skill['Name'] }}</option>
+            {% endfor %}
+        </select>
+        <span style="display:flex; flex-direction:row;">
+            <input class="checkbox" type="checkbox" id="volunteers-involved" name="volunteers-involved">
+            <p style="margin-left:5px;">Volunteers involved in my events</p>
+        </span>
+        <button type="submit">Search</button>
+    </form>
+    <div class="block-wrapper">
+        {% for volunteer in volunteers %}
+        <a class="info-block" href="\volunteer?id={{ volunteer['ID'] }}">
+            <h1>{{ volunteer["FirstName"] }} {{ volunteer["LastName"]}}</h1>
+            <p>Skills:</p>
+            {% for skill in volunteer["Skill"] %}
+            <p>{{ skill }}</p>
+            {% endfor %}
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

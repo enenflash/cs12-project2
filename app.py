@@ -130,6 +130,32 @@ def org_dashboard():
         return redirect(url_for("org_login"))
     return render_template('organisation/org_dashboard.html')
 
+@app.route('/org-events', methods=['GET', 'POST'])
+def org_events():
+    events = get_events()
+    return render_template('organisation/org_events.html', events=events)
+
+@app.route('/org-volunteers', methods=['GET', 'POST'])
+def org_volunteers():
+    skills = get_skills()
+    volunteers = get_volunteers()
+
+    if request.method == "POST":
+        query = request.form["search"]
+        skill = request.form["skill-id"]
+        volunteers_involved = request.form.get('volunteers-involved')
+        if query != "":
+            volunteers = filter_volunteers_by_query(volunteers, query)
+        if skill != "-":
+            volunteers = filter_volunteers_by_skill(volunteers, skill)
+        if volunteers_involved:
+            if "OID" not in session:
+                return redirect(url_for("org_login"))
+            volunteers = filter_volunteers_by_involved(volunteers, session["OID"])
+        return render_template('organisation/org_volunteers.html', volunteers=volunteers, skills=skills)
+
+    return render_template('organisation/org_volunteers.html', volunteers=volunteers, skills=skills)
+
 if __name__ == "__main__":
     use_ip = input("Use private IP (Y/N): ")
     ip = get_local_ip() if use_ip=="Y" else "127.0.0.1"

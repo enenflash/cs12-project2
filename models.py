@@ -59,11 +59,31 @@ def run_command(command:str) -> None:
 
 # ---------------------------------- SELECT ---------------------------------- #
 
+def get_skills(where:str="TRUE") -> list:
+    command = f"""
+        SELECT * FROM Skill WHERE {where};
+    """
+    return get_table(command)
+
+def get_skills_for_volunteer(volunteer_id:int) -> list:
+    command = f"""
+        SELECT Skill.Name FROM VolunteerSkill 
+        INNER JOIN Skill ON VolunteerSkill.SkillID=Skill.ID
+        WHERE VolunteerSkill.VolunteerID={volunteer_id};
+    """
+    skills:list[dict] = get_table(command)
+    return [skill["Name"] for skill in skills]
+
 def get_volunteers(where:str="TRUE") -> list:
     command = f"""
         SELECT * FROM Volunteer WHERE {where};
     """
-    return get_table(command)
+    volunteers:list[dict] = get_table(command)
+    for i in range(len(volunteers)):
+        volunteers[i] = dict(volunteers[i])
+        volunteers[i]["Skill"] = get_skills_for_volunteer(volunteers[i]["ID"])
+        volunteers[i]["FullName"] = volunteers[i]["FirstName"] + " " + volunteers[i]["LastName"]
+    return volunteers
 
 def get_organistaions(where:str="TRUE") -> list:
     command = f"""
@@ -133,6 +153,27 @@ def get_events(where:str="TRUE") -> list:
         events[i]["EndDate"] = format_time(events[i]["EndDate"].split(" ")[1]) + " " + format_date(events[i]["EndDate"].split(" ")[0])
     return events
 
+# ---------------------------------- FILTER ---------------------------------- #
+
+def filter_volunteers_by_query(volunteers:list[dict], query:str):
+    """Requires volunteers from get_volunteers()"""
+    return [volunteer for volunteer in volunteers if any([word.lower() in volunteer["FullName"].lower() for word in query.split(" ")])]
+
+def filter_volunteers_by_skill(volunteers:list[dict], skill_id:int):
+    """Requires volunteers from get_volunteers()"""
+    skill_name = get_skills(f'ID="{skill_id}"')[0]["Name"]
+    return [volunteer for volunteer in volunteers if skill_name in volunteer["Skill"]]
+
+def filter_volunteers_by_involved(volunteers:list[dict], org_id:int):
+    """Requires volunteers from get_volunteers()"""
+    command = f"""
+        SELECT DISTINCT VO.VolunteerID FROM Event
+        INNER JOIN VolunteerOpportunity AS VO ON VO.EventID=Event.ID
+        WHERE Event.OrganisationID={org_id} AND VO.VolunteerID NOT NULL;
+    """
+    volunteers_involved = [row["VolunteerID"] for row in get_table(command)]
+    return [volunteer for volunteer in volunteers if volunteer["ID"] in volunteers_involved]
+
 # ---------------------------------- MODIFY ---------------------------------- #
 
 def alter_account_details(id:int, first_name:str=None, last_name:str=None, password:str=None):
@@ -177,7 +218,6 @@ def delete_event(id:int) -> None:
     command = f"""
         DELETE FROM Event WHERE ID={id};
     """
-    print("A")
     run_command(command)
 
 # -------------------------------- CHECK VALID ------------------------------- #
