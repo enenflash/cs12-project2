@@ -156,6 +156,15 @@ def org_volunteers():
 
     return render_template('organisation/org_volunteers.html', volunteers=volunteers, skills=skills)
 
+@app.route('/org-stats', methods=['GET'])
+def org_stats():
+    if "OID" not in session:
+        return redirect(url_for("org_login"))
+    unique_volunteers:int = get_unique_volunteers(session["OID"])
+    total_opportunities:int = get_total_opportunities(session["OID"])
+    needed_vs_filled:list = get_total_volunteers_needed_vs_filled_per_event(session["OID"])
+    return render_template('organisation/org_stats.html', unique_volunteers=unique_volunteers, total_opportunities=total_opportunities, needed_vs_filled_per_event=needed_vs_filled)
+
 if __name__ == "__main__":
     use_ip = input("Use private IP (Y/N): ")
     ip = get_local_ip() if use_ip=="Y" else "127.0.0.1"

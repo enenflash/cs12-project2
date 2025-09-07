@@ -1,0 +1,50 @@
+{% extends "organisation/org_view.html" %}
+
+{% block content %}
+<div class="wrapper">
+<h1 style="margin-bottom:5px;">Statistics</h1>
+<p>
+    Unique Volunteers: {{ unique_volunteers }}<br>
+    Total Volunteering Opportunities: {{ total_opportunities }}
+</p>
+<table style="border-collapse:collapse">
+    <tr>
+        <th>Event Name</th>
+        <th>Total Volunteers Needed</th>
+        <th>Positions Filled</th>
+    </tr>
+    {% for needed_vs_filled in needed_vs_filled_per_event %}
+    <tr>
+        <td>{{ needed_vs_filled["Name"] }}</td>
+        <td>{{ needed_vs_filled["TotalNeeded"] }}</td>
+        <td>{{ needed_vs_filled["PositionsFilled"] }}</td>
+    </tr>
+    {% endfor %}
+</table>
+</div>
+<style>
+    .wrapper {
+        display: flex;
+        flex-direction: column;
+        background: #fff;
+        padding: 20px;
+    }
+    td, th {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    tr:hover {
+        background-color: #ddd;
+    }
+    th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: #000;
+        color: white;
+    }
+</style>
+{% endblock %}

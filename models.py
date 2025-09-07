@@ -153,6 +153,33 @@ def get_events(where:str="TRUE") -> list:
         events[i]["EndDate"] = format_time(events[i]["EndDate"].split(" ")[1]) + " " + format_date(events[i]["EndDate"].split(" ")[0])
     return events
 
+# ----------------------------------- STATS ---------------------------------- #
+
+def get_unique_volunteers(org_id:int) -> int:
+    command = f"""
+        SELECT DISTINCT COUNT(VO.VolunteerID) AS UniqueVolunteers FROM VolunteerOpportunity AS VO 
+        INNER JOIN Event ON VO.EventID=Event.ID
+        WHERE Event.OrganisationID={org_id};
+    """
+    return get_row(command)["UniqueVolunteers"]
+
+def get_total_opportunities(org_id:int) -> int:
+    command = f"""
+        SELECT COUNT(*) AS TotalOpportunities FROM VolunteerOpportunity AS VO
+        INNER JOIN Event ON VO.EventID=Event.ID
+        WHERE Event.OrganisationID={org_id};
+    """
+    return get_row(command)["TotalOpportunities"]
+
+def get_total_volunteers_needed_vs_filled_per_event(org_id:int) -> list:
+    command = f"""
+        SELECT Event.Name, COUNT(*) AS TotalNeeded, COUNT(VO.VolunteerID) AS PositionsFilled FROM VolunteerOpportunity AS VO
+        INNER JOIN Event ON VO.EventID=Event.ID
+        WHERE Event.OrganisationID={org_id}
+        GROUP BY EventID;
+    """
+    return get_table(command)
+
 # ---------------------------------- FILTER ---------------------------------- #
 
 def filter_volunteers_by_query(volunteers:list[dict], query:str):
