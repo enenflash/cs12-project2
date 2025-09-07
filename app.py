@@ -21,6 +21,8 @@ def create_account():
         first_name=request.form["first-name"]
         last_name=request.form["last-name"]
         password=request.form["password"]
+        if "@" not in email or "." not in email:
+            return render_template("create_account.html", message="Email is invalid.")
         if email=="" or first_name=="" or last_name=="" or password=="":
             return render_template("create_account.html", message="All fields required.")
         volunteers = get_volunteers()
@@ -164,6 +166,31 @@ def org_stats():
     total_opportunities:int = get_total_opportunities(session["OID"])
     needed_vs_filled:list = get_total_volunteers_needed_vs_filled_per_event(session["OID"])
     return render_template('organisation/org_stats.html', unique_volunteers=unique_volunteers, total_opportunities=total_opportunities, needed_vs_filled_per_event=needed_vs_filled)
+
+@app.route('/org-create', methods=['GET', 'POST'])
+def org_create():
+    if "OID" not in session:
+        return redirect(url_for("org_login"))
+    if request.method == "POST":
+        name=request.form["event-name"]
+        start_date=request.form["start-date"]
+        start_time=request.form["start-time"]+":00"
+        end_date=request.form["end-date"]
+        end_time=request.form["end-time"]+":00"
+        location_id=request.form["location"]
+        new_location=request.form["new-location"]
+        
+        if name=="" or start_date=="" or end_date=="" or start_time=="" or end_time=="":
+            return render_template("organisation/org_create.html", message="All fields required.")
+        
+        if new_location != "":
+            add_location(new_location)
+            location_id = get_locations(f'Name="{new_location}"')
+        
+        add_event(name, start_date+" "+start_time, end_date+" "+end_time, location_id, session["OID"])
+        return render_template("organisation/org_create.html", message="Creation Success.")
+    locations = get_locations()
+    return render_template("organisation/org_create.html", locations=locations)
 
 if __name__ == "__main__":
     use_ip = input("Use private IP (Y/N): ")

@@ -59,6 +59,12 @@ def run_command(command:str) -> None:
 
 # ---------------------------------- SELECT ---------------------------------- #
 
+def get_locations(where:str="TRUE") -> list:
+    command = f"""
+        SELECT * FROM Location WHERE {where};
+    """
+    return get_table(command)
+
 def get_skills(where:str="TRUE") -> list:
     command = f"""
         SELECT * FROM Skill WHERE {where};
@@ -236,6 +242,19 @@ def add_volunteer(first_name:str, last_name:str, email:str, password:str):
 def add_organisation(name:str):
     command = f"""
         INSERT INTO Organistaion (Name) VALUES ("{name}");
+    """
+    run_command(command)
+
+def add_location(name:str):
+    command = f"""
+        INSERT INTO Location (Name) VALUES ("{name}");
+    """
+    run_command(command)
+
+def add_event(name:str, start_date:str, end_date:str, location_id:int, organisation_id:int):
+    command = f"""
+        INSERT INTO Event (Name, StartDate, EndDate, LocationID, OrganisationID) VALUES
+        ("{name}", "{start_date}", "{end_date}", {location_id}, {organisation_id});
     """
     run_command(command)
 

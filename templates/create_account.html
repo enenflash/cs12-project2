@@ -2,8 +2,8 @@
 
 {% block content %}
 <link rel="stylesheet" href="static/forms.css">
-<form class="account-wrapper" action="{{ url_for('create_account') }}" method="post">
-    <div class="account-box" style="width: 350px;">
+<form class="form-wrapper" action="{{ url_for('create_account') }}" method="post">
+    <div class="form-box" style="width: 350px;">
     <h1>CREATE AN ACCOUNT</h1>
     <span>
         <label for="email">Email</label>
@@ -18,6 +18,7 @@
         <input type="password" id="confirm-password" name="confirm-password" placeholder="Password">
     </span>
     <p style="color:red">{{ message }}</p>
+    <p><strong>Note: </strong>Your email, first name and last name are publicly visible. We collect your email, first name and last name purely for the purpose of connecting you with organisations listed on this website and other volunteering opportunities.</p>
     <button type="submit" class="full-btn">Create</button>
     </div>
 </form>

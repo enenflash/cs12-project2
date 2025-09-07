@@ -1,0 +1,32 @@
+{% extends "organisation/org_view.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="static/forms.css">
+<form class="form-wrapper" action="{{ url_for('org_create') }}" method="post">
+    <div class="form-box" style="width: 350px;">
+    <h1>CREATE AN EVENT</h1>
+    <span>
+        <label for="event-name">Event Name</label>
+        <input type="text" id="event-name" name="event-name" style="margin-bottom:10px;" placeholder="E.g. October Clean-Up">
+        <label for="start-date">Start Date</label>
+        <input type="date" id="start-date" name="start-date" style="margin-bottom:10px;">
+        <label for="start-time">Start Time</label>
+        <input type="time" id="start-time" name="start-time" style="margin-bottom:10px;">
+        <label for="end-date">End Date</label>
+        <input type="date" id="end-date" name="end-date" style="margin-bottom:10px;">
+        <label for="end-time">End Time</label>
+        <input type="time" id="end-time" name="end-time" style="margin-bottom:10px;">
+        <label for="location">Location</label>
+        <select class="input-box" id="location" name="location">
+            {% for location in locations %}
+            <option value="{{ location['ID'] }}">{{ location["Name"] }}</option>
+            {% endfor %}
+        </select>
+        <label for="new-location">If New Location (ignore previous input)</label>
+        <input type="text" id="new-location" name="new-location" placeholder="E.g. The bottom of the lake.">
+    </span>
+    <p style="color:red">{{ message }}</p>
+    <button type="submit" class="full-btn">Create</button>
+    </div>
+</form>
+{% endblock %}
