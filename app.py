@@ -103,6 +103,28 @@ def event():
     perms = session["Admin"] if "Admin" in session else False
     return render_template("event.html", event=event, perms=perms, message="")
 
+@app.route('/opportunity', methods=['GET', 'POST'])
+def opportunity():
+    if request.method == "POST":
+        if "UID" not in session:
+            return redirect(url_for("login"))
+        opportunity_id = request.form["OpportunityID"]
+        try:
+            opportunity = get_available_opportunities(f"VO.ID={opportunity_id}")[0]
+        except IndexError:
+            opportunity = get_taken_opportunities(f"VO.ID={opportunity_id}")[0]
+        sign_up_for_opportunity(opportunity_id, session["UID"])
+        return render_template("opportunity.html", opportunity=opportunity, message="Sign-up success.")
+    
+    opportunity_id = request.args.get('id', default="-1")
+    if opportunity_id == "-1":
+        return redirect(url_for("volunteering"))
+    try:
+        opportunity = get_available_opportunities(f"VO.ID={opportunity_id}")[0]
+    except IndexError:
+        opportunity = get_taken_opportunities(f"VO.ID={opportunity_id}")[0]
+    return render_template("opportunity.html", opportunity=opportunity)
+
 @app.route('/organisations', methods=['GET', 'POST'])
 def organisations():
     organisations = get_organistaions()

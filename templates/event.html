@@ -12,13 +12,13 @@
         <input type="text" id="location" name="location" value="{{ event['Location'] }}" readonly>
         {% if perms %}<button type="button" id="edit-location" style="margin-left:5px;"><span class="material-symbols-outlined">edit</span></button>{% endif %}
     </span>
-    <p>StartDate</p>
+    <p>Start Date</p>
     <span class="input-wrapper">
         <input type="date" id="start-date" name="start-date" value="{{ event['StartDateOnly'] }}" style="margin-right:2px;" readonly>
         <input type="time" id="start-time" name="start-time" value="{{ event['StartTime'] }}" style="margin-left:2px;" readonly>
         {% if perms %}<button type="button" id="edit-start-date" style="margin-left:5px;"><span class="material-symbols-outlined">edit</span></button>{% endif %}
     </span>
-    <p>EndDate</p>
+    <p>End Date</p>
     <span class="input-wrapper">
         <input type="date" id="end-date" name="end-date" value="{{ event['EndDateOnly'] }}" style="margin-right:2px;" readonly>
         <input type="time" id="end-time" name="end-time" value="{{ event['EndTime'] }}" style="margin-left:2px;" readonly>

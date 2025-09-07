@@ -115,8 +115,12 @@ def get_available_opportunities(where:str="TRUE") -> list:
     opportunities:list[dict] = get_table(command)
     for i in range(len(opportunities)):
         opportunities[i] = dict(opportunities[i])
+        opportunities[i]["Taken"] = False
         opportunities[i]["Skill"] = get_skills_for_opportunity(opportunities[i]["EventID"])
-        opportunities[i] |= get_events(f"Event.ID={opportunities[i]['EventID']}")[0]
+        event_details = get_events(f"Event.ID={opportunities[i]['EventID']}")[0]
+        event_details["EventID"] = event_details["ID"]
+        del event_details["ID"]
+        opportunities[i] |= event_details
     return opportunities
 
 def get_taken_opportunities(where:str="TRUE") -> list:
@@ -128,8 +132,12 @@ def get_taken_opportunities(where:str="TRUE") -> list:
     opportunities:list[dict] = get_table(command)
     for i in range(len(opportunities)):
         opportunities[i] = dict(opportunities[i])
+        opportunities[i]["Taken"] = True
         opportunities[i] |= get_volunteers(f"ID={opportunities[i]['VolunteerID']}")[0]
-        opportunities[i] |= get_events(f"Event.ID={opportunities[i]['EventID']}")[0]
+        event_details = get_events(f"Event.ID={opportunities[i]['EventID']}")[0]
+        event_details["EventID"] = event_details["ID"]
+        del event_details["ID"]
+        opportunities[i] |= event_details
     return opportunities
 
 def get_event_types_for_event(event_id:int) -> list[str]:
@@ -229,6 +237,12 @@ def alter_account_details(id:int, first_name:str=None, last_name:str=None, passw
 # coming soon
 def alter_event_details():
     pass
+
+def sign_up_for_opportunity(opportunity_id:int, volunteer_id:int):
+    command = f"""
+        UPDATE VolunteerOpportunity SET VolunteerID={volunteer_id} WHERE ID={opportunity_id};
+    """
+    run_command(command)
 
 # ------------------------------------ ADD ----------------------------------- #
 

@@ -1,0 +1,27 @@
+{% extends "general.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="\static\forms.css">
+<form class="form-wrapper" action="{{ url_for('opportunity') }}" method="post">
+<div class="form-box">
+    <input type="number" id="OpportunityID" name="OpportunityID" style="display:none;" value="{{ opportunity['ID'] }}" readonly>
+    <h1>{{ opportunity["Name"] }}</h1>
+    <p>
+        Organisation: {{ opportunity["Organisation"] }}<br>
+        Location: {{ opportunity["Location"] }}<br>
+        Start Date: {{ opportunity["StartDate"] }}<br>
+        End Date: {{ opportunity["EndDate"] }}
+    </p>
+    <p>
+        Skills Needed:
+        {% for skill in opportunity["Skill"] %}
+        <br>{{ skill["Name"] }}
+        {% endfor %}
+    </p>
+    <p style="color:green">{{ message }}</p>
+    {% if not opportunity["Taken"] %}
+        <button type="submit" class="full-btn">Volunteer for this event</button>
+    {% endif %}
+    </div>
+</form>
+{% endblock %}

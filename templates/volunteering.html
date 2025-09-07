@@ -11,13 +11,13 @@
     </form>
     <div class="block-wrapper">
         {% for opportunity in opportunities %}
-        <div class="info-block">
+        <a class="info-block" href="\opportunity?id={{ opportunity['ID'] }}">
             <h1>{{ opportunity["Name"] }}</h1>
             <p>From {{ opportunity["StartDate"] }} To {{ opportunity["EndDate"] }}</p>
             <p>At {{ opportunity["Location"] }}</p>
             <p>Run by {{ opportunity["Organisation"] }}</p>
             <p>Skills: {% for skill in opportunity["Skill"] %}{{ skill }}, {% endfor %}</p>
-        </div>
+        </a>
         {% endfor %}
     </div>
 </div>
